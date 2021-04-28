@@ -39,8 +39,7 @@ input ENUM_APPLIED_VOLUME inpVolumeType = VOLUME_TICK;      // Volume Type to us
 
 //
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 //
 //+------------------------------------------------------------------+

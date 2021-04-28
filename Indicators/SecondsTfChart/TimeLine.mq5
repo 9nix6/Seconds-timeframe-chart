@@ -1,12 +1,11 @@
-#property copyright "Copyright 2018-2020, Level Up Software"
+#property copyright "Copyright 2018-2021, Level Up Software"
 #property link      "https://www.az-invest.eu"
-#property description "A timescale indicator for use on the Seconds timeframe chart."
-#property version   "1.03"
+#property description "A timescale indicator for use on the custom chart."
+#property version   "1.04"
 #property indicator_separate_window
 #property indicator_plots 0
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 #define PREFIX_SEED "6D4E6"
 

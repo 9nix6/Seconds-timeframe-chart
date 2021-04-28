@@ -42,7 +42,7 @@ static ENUM_APPLIED_VOLUME InpVolumeType= (SymbolInfoInteger(_Symbol,SYMBOL_VOLU
 input bool InpShowVolume = true;             // Show volume histogram
 input bool InpShowBuySellVolume = true;      // Show bar's buy/sell volume breakdown
 input bool InpShowBarDelta = true;           // Show bar's buy/sell volume delta 
-input bool InpShowCumulativeDelta = true;    // Show cumulative volume delta
+input bool InpShowCumulativeDelta = false;   // Show cumulative volume delta
 input int  InpCumulativeDeltaScale = 1;      // Scale down cumulative volume 1:x
 
 //---- indicator buffers
@@ -62,8 +62,7 @@ double  cumulativeDelta = 0;
 
 //
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 //
 

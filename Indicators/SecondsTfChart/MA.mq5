@@ -23,8 +23,7 @@ double               ExtLineBuffer[];
 
 //
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 //
 

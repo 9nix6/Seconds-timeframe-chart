@@ -26,8 +26,7 @@ double               ExtMABuffer[];
 int                  ExtStdDevPeriod,ExtStdDevShift;
 
 #include <MovingAverages.mqh>
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 //+------------------------------------------------------------------+
 //| Custom indicator initialization function                         |

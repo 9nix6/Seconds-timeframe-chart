@@ -57,8 +57,7 @@ double dtosf2[];
 
 //
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 //
 

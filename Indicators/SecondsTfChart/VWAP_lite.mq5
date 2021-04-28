@@ -58,8 +58,7 @@ enum PRICE_TYPE
 
 //
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 #define VWAP_Daily "cc__VWAP_Daily"
 #define VWAP_Weekly "cc__VWAP_Weekly"

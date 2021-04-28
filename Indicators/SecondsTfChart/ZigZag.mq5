@@ -28,8 +28,7 @@ double         deviation;           // deviation in points
 
 //
 
-#include <AZ-INVEST/SDK/SecondsChartIndicator.mqh>
-SecondsChartIndicator customChartIndicator;
+#include <AZ-INVEST/CustomBarConfig.mqh>
 
 //
 //+------------------------------------------------------------------+
