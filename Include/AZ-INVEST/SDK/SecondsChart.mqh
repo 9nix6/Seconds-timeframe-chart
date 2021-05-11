@@ -216,17 +216,18 @@ int SecondsChart::Init()
 
    TIMEINTERVALCHART_SETTINGS s = secondsChartSettings.GetTimeIntervalChartSettings(); 
    CHART_INDICATOR_SETTINGS cis = secondsChartSettings.GetChartIndicatorSettings(); 
+   ALERT_INFO_SETTINGS als = secondsChartSettings.GetAlertInfoSettings();
    
    secondsChartHandle = iCustom(this.secondsChartSymbol, _Period, SECONDS_INDICATOR_NAME,                                        
                                        s.intervalMultiple,
                                        s.showNumberOfDays, 
                                        s.resetOpenOnNewTradingDay,
                                        "-",
-                                       showPivots,
-                                       pivotPointCalculationType,
+                                       als.showPivots,
+                                       als.pivotPointCalculationType,
                                        "-",
-                                       AlertMeWhen,
-                                       AlertNotificationType,
+                                       InpAlertMeWhen,
+                                       InpAlertNotificationType,
                                        "-",
                                        cis.MA1lineType,
                                        cis.MA1period,

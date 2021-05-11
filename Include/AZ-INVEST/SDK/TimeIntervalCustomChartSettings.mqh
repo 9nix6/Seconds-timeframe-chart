@@ -11,17 +11,17 @@
 //
 #ifdef SHOW_INDICATOR_INPUTS
    
-      input int            intervalMultiple = 30;                    // Bar duration in seconds
-            ENUM_INTERVAL  interval = INTERVAL_SECONDS;              // Interval multiple
-      input int            showNumberOfDays = 5;                     // Show history for number of days
-      input ENUM_BOOL      resetOpenOnNewTradingDay = true;          // Synchronize first bar's open on new day
+      input int            InpIntervalMultiple = 30;                    // Bar duration in seconds
+            ENUM_INTERVAL  InpInterval = INTERVAL_SECONDS;              // Interval multiple
+      input int            InpShowNumberOfDays = 5;                     // Show history for number of days
+      input ENUM_BOOL      InpResetOpenOnNewTradingDay = true;          // Synchronize first bar's open on new day
    
 #else // don't SHOW_INDICATOR_INPUTS 
 
-      int            intervalMultiple = 30;                    // Bar duration in seconds
-      ENUM_INTERVAL  interval = INTERVAL_SECONDS;              // Interval multiple
-      int            showNumberOfDays = 5;                     // Show history for number of days
-      ENUM_BOOL      resetOpenOnNewTradingDay = true;          // Synchronize first bar's open on new day
+      int            InpIntervalMultiple = 30;                    // Bar duration in seconds
+      ENUM_INTERVAL  InpInterval = INTERVAL_SECONDS;              // Interval multiple
+      int            InpShowNumberOfDays = 5;                     // Show history for number of days
+      ENUM_BOOL      InpResetOpenOnNewTradingDay = true;          // Synchronize first bar's open on new day
 
 #endif
 
@@ -66,7 +66,7 @@ void CTimeIntervalCustomChartSettigns::CTimeIntervalCustomChartSettigns()
    settingsFileName = GetSettingsFileName();
    
    // calculate interval
-   settings.barTimeInterval = (long)_INTERVAL_MULT[interval] * (long)intervalMultiple;
+   settings.barTimeInterval = (long)_INTERVAL_MULT[InpInterval] * (long)InpIntervalMultiple;
 }
 
 void CTimeIntervalCustomChartSettigns::~CTimeIntervalCustomChartSettigns()
@@ -91,8 +91,8 @@ uint CTimeIntervalCustomChartSettigns::CustomChartSettingsFromFile(int file_hand
 void CTimeIntervalCustomChartSettigns::SetCustomChartSettings()
 {
    //settings.barSizeInTicks = barSizeInTicks;
-   settings.interval = interval;
-   settings.intervalMultiple = intervalMultiple;
-   settings.showNumberOfDays = showNumberOfDays;
-   settings.resetOpenOnNewTradingDay = resetOpenOnNewTradingDay;
+   settings.interval = InpInterval;
+   settings.intervalMultiple = InpIntervalMultiple;
+   settings.showNumberOfDays = InpShowNumberOfDays;
+   settings.resetOpenOnNewTradingDay = InpResetOpenOnNewTradingDay;
 }
