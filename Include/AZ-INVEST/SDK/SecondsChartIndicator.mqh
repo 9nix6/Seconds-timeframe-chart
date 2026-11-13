@@ -1,4 +1,4 @@
-#property copyright "Copyright 2018-2020, Level Up Software"
+﻿#property copyright "Copyright 2018-2020, Level Up Software"
 #property link      "http://www.az-invest.eu"
 #property version   "3.00"
 
@@ -69,6 +69,18 @@ class SecondsChartIndicator
       int      GetRatesTotal() { return ArraySize(Open); };     
       void     BufferShiftLeft(double &buffer[]);
       
+      bool     CanvasXYToTimePrice(
+                  long           chart_id,     // Chart ID
+                  long           x,            // The X coordinate on the chart
+                  double         y,            // The Y coordinate on the chart
+                  int&           sub_window,   // The number of the subwindow
+                  datetime&      time,         // Time on custom chart
+                  datetime&      canvasTime,   // Time on canvas chart
+                  double&        price         // Price oncustom chart
+               );
+      bool     TimeToCustomChartTime(datetime canvasTime, datetime& customChartTime);
+      bool     CustomChartTimeToCanvasTime(datetime customChartTime, datetime& canvasTime);
+
    private:
   
       bool  CheckStatus();
@@ -492,8 +504,8 @@ int SecondsChartIndicator::GetOLHCForIndicatorCalc(double &o[],double &l[],doubl
    if(handle == INVALID_HANDLE)
       return -1;
 
-   int _count = CopyBuffer(handle,SECONDS_OPEN,start,count,temp);
-   if(_count == -1)
+   int copied = CopyBuffer(handle,SECONDS_OPEN,start,count,temp);
+   if(copied == -1)
    {
       int errorCode = GetLastError();
       if(errorCode == ERR_INDICATOR_DATA_NOT_FOUND)
@@ -505,10 +517,10 @@ int SecondsChartIndicator::GetOLHCForIndicatorCalc(double &o[],double &l[],doubl
          return -1;
    }   
       
-   if(_count < count)
+   if(copied < count)
    {
       #ifdef DISPLAY_DEBUG_MSG
-         PrintFormat("Fixing offset (req:%d res:%d)",count,_count);
+         PrintFormat("Fixing offset (req:%d res:%d)",count,copied);
       #endif
       
       ArrayInitialize(o,0x0);
@@ -534,52 +546,52 @@ int SecondsChartIndicator::GetOLHCForIndicatorCalc(double &o[],double &l[],doubl
 
       // less data - indicator requres more
       
-      ArrayCopy(o,temp,(count-_count),0);
+      ArrayCopy(o,temp,(count-copied),0);
 
-      if(CopyBuffer(handle,SECONDS_LOW,start,_count,temp) == -1)
+      if(CopyBuffer(handle,SECONDS_LOW,start,copied,temp) == -1)
          return -1;
-      ArrayCopy(l,temp,(count-_count),0);
+      ArrayCopy(l,temp,(count-copied),0);
          
-      if(CopyBuffer(handle,SECONDS_HIGH,start,_count,temp) == -1)
+      if(CopyBuffer(handle,SECONDS_HIGH,start,copied,temp) == -1)
          return -1;
-      ArrayCopy(h,temp,(count-_count),0);
+      ArrayCopy(h,temp,(count-copied),0);
 
-      if(CopyBuffer(handle,SECONDS_CLOSE,start,_count,temp) == -1)
+      if(CopyBuffer(handle,SECONDS_CLOSE,start,copied,temp) == -1)
          return -1;
 
-      ArrayCopy(c,temp,(count-_count),0);
+      ArrayCopy(c,temp,(count-copied),0);
       
       if(getTime)
       {
-         if(CopyBuffer(handle,SECONDS_BAR_OPEN_TIME,start,_count,temp) == -1)
+         if(CopyBuffer(handle,SECONDS_BAR_OPEN_TIME,start,copied,temp) == -1)
             return -1;
-         ArrayCopy(t,temp,(count-_count),0);      
+         ArrayCopy(t,temp,(count-copied),0);      
       }
       
       if(getVolumes)
       {
-         if(CopyBuffer(handle,SECONDS_TICK_VOLUME,start,_count,temp) == -1)
+         if(CopyBuffer(handle,SECONDS_TICK_VOLUME,start,copied,temp) == -1)
             return -1;
-         ArrayCopy(tickVolume,temp,(count-_count),0);
+         ArrayCopy(tickVolume,temp,(count-copied),0);
    
-         if(CopyBuffer(handle,SECONDS_REAL_VOLUME,start,_count,temp) == -1)
+         if(CopyBuffer(handle,SECONDS_REAL_VOLUME,start,copied,temp) == -1)
             return -1;
-         ArrayCopy(realVolume,temp,(count-_count),0);      
+         ArrayCopy(realVolume,temp,(count-copied),0);      
       }
       
       if(getVolumeBreakdown)
       {      
-         if(CopyBuffer(handle,SECONDS_BUY_VOLUME,start,_count,temp) == -1)
+         if(CopyBuffer(handle,SECONDS_BUY_VOLUME,start,copied,temp) == -1)
             return -1;
-         ArrayCopy(buyVolume,temp,(count-_count),0);
+         ArrayCopy(buyVolume,temp,(count-copied),0);
 
-         if(CopyBuffer(handle,SECONDS_SELL_VOLUME,start,_count,temp) == -1)
+         if(CopyBuffer(handle,SECONDS_SELL_VOLUME,start,copied,temp) == -1)
             return -1;
-         ArrayCopy(sellVolume,temp,(count-_count),0);
+         ArrayCopy(sellVolume,temp,(count-copied),0);
 
-         if(CopyBuffer(handle,SECONDS_BUYSELL_VOLUME,start,_count,temp) == -1)
+         if(CopyBuffer(handle,SECONDS_BUYSELL_VOLUME,start,copied,temp) == -1)
             return -1;
-         ArrayCopy(buySellVolume,temp,(count-_count),0);
+         ArrayCopy(buySellVolume,temp,(count-copied),0);
       }
    }
    else
@@ -637,11 +649,11 @@ int SecondsChartIndicator::GetOLHCAndApplPriceForIndicatorCalc(double &o[],doubl
 {
    dataReady = true;
    
-   int _count = GetOLHCForIndicatorCalc(o,l,h,c,t,tickVolume,realVolume,buyVolume,sellVolume,buySellVolume,start,count);
-   if(_count < 0)
+   int copied = GetOLHCForIndicatorCalc(o,l,h,c,t,tickVolume,realVolume,buyVolume,sellVolume,buySellVolume,start,count);
+   if(copied < 0)
    {
       dataReady = false;
-      return _count;
+      return copied;
    }
    if(applied_price == PRICE_CLOSE) 
    {
@@ -661,16 +673,16 @@ int SecondsChartIndicator::GetOLHCAndApplPriceForIndicatorCalc(double &o[],doubl
    }
    else
    {       
-      if(ArrayResize(price,_count) == -1)
+      if(ArrayResize(price,copied) == -1)
          return -1;      
 
-      for(int i=0; i<_count; i++)
+      for(int i=0; i<copied; i++)
       {
          price[i] = CalcAppliedPrice(o[i],l[i],h[i],c[i],_applied_price);
       }
    }
       
-   return _count;
+   return copied;
 }
 
 // TFMigrate: 
@@ -825,3 +837,52 @@ datetime SecondsChartIndicator::GetArrayValueDateTime(datetime &arr[], int index
    }
 }
 
+bool SecondsChartIndicator::CanvasXYToTimePrice(
+                  long           chart_id,     // Chart ID
+                  long           x,            // The X coordinate on the chart
+                  double         y,            // The Y coordinate on the chart
+                  int&           sub_window,   // The number of the subwindow
+                  datetime&      time,         // Time on custom chart
+                  datetime&      canvasTime,   // Time on canvas chart
+                  double&        price)        // Price on custom chart
+{  
+   if(!ChartXYToTimePrice(chart_id, (int)x, (int)y, sub_window, canvasTime, price))
+      return false;
+
+   return TimeToCustomChartTime(canvasTime, time);
+}
+
+bool SecondsChartIndicator::TimeToCustomChartTime(datetime canvasTime, datetime& customChartTime)
+{
+   int ix = iBarShift(_Symbol, _Period, canvasTime); 
+   if(ix < 0)
+      return false;
+      
+   ArraySetAsSeries(Time,true);
+
+   customChartTime = Time[(int)MathAbs(MathMin((double)(ArraySize(Time)-1), (double)ix))];
+   return true;
+}
+
+bool SecondsChartIndicator::CustomChartTimeToCanvasTime(datetime customChartTime, datetime& canvasTime)
+{
+   ArraySetAsSeries(Time,true);
+   
+   int ix = -1;
+   int count = ArraySize(Time);
+   
+   for(int i=0; i<count; i++)
+   {
+      if(Time[i] <= customChartTime)
+      {
+         ix = i;
+         break;
+      }
+   }
+   
+   if(ix == -1)
+      return false;
+      
+   canvasTime = ::iTime(_Symbol, _Period, ix);
+   return true;
+}

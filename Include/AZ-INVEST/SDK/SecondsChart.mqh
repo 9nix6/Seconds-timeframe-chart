@@ -1,4 +1,4 @@
-#property copyright "Copyright 2018-2021, Level Up Software"
+﻿#property copyright "Copyright 2018-2021, Level Up Software"
 #property link      "https://www.az-invest.eu"
 
 #ifdef DEVELOPER_VERSION
@@ -40,7 +40,7 @@
 #define SECONDS_BUYSELL_VOLUME     19
 #define SECONDS_RUNTIME_ID         20
 
-#include <az-invest/sdk/TimeIntervalCustomChartSettings.mqh>
+#include <AZ-INVEST/SDK/TimeIntervalCustomChartSettings.mqh>
 
 class SecondsChart
 {
@@ -161,7 +161,7 @@ void SecondsChart::ReleaseHandle()
 
 int SecondsChart::Init()
 {
-   if(!MQLInfoInteger((int)MQL5_TESTING))
+   if(!MQLInfoInteger((int)MQL_TESTER))
    {
       if(usedByIndicatorOnCustomChart) 
       {
@@ -221,6 +221,7 @@ int SecondsChart::Init()
    secondsChartHandle = iCustom(this.secondsChartSymbol, _Period, SECONDS_INDICATOR_NAME,                                        
                                        s.intervalMultiple,
                                        s.showNumberOfDays, 
+                                       s.showFromDate,
                                        s.resetOpenOnNewTradingDay,
                                        "-",
                                        als.showPivots,
@@ -260,8 +261,7 @@ int SecondsChart::Init()
                                        cis.ChannelAppliedPrice,
                                        cis.ChannelMultiplier,
                                        cis.ChannelBandsDeviations, 
-                                       cis.ChannelPriceLabel,
-                                       cis.ChannelMidPriceLabel,
+                                       cis.ChannelPriceLabels,
                                        "-",
                                        true); // used in EA
 // --- all remaining settings are left at defaults since they have no impact on the EA ---

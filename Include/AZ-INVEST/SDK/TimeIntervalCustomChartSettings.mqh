@@ -1,4 +1,4 @@
-#include <AZ-INVEST/SDK/CommonSettings.mqh>
+﻿#include <AZ-INVEST/SDK/CommonSettings.mqh>
 
 #ifdef DEVELOPER_VERSION
    #define CUSTOM_CHART_NAME "TimeIntervalChart_TEST"
@@ -14,6 +14,7 @@
       input int            InpIntervalMultiple = 30;                    // Bar duration in seconds
             ENUM_INTERVAL  InpInterval = INTERVAL_SECONDS;              // Interval multiple
       input int            InpShowNumberOfDays = 5;                     // Show history for number of days
+      input datetime       InpShowFromDate = 0;                         // Show history starting from
       input ENUM_BOOL      InpResetOpenOnNewTradingDay = true;          // Synchronize first bar's open on new day
    
 #else // don't SHOW_INDICATOR_INPUTS 
@@ -21,6 +22,7 @@
       int            InpIntervalMultiple = 30;                    // Bar duration in seconds
       ENUM_INTERVAL  InpInterval = INTERVAL_SECONDS;              // Interval multiple
       int            InpShowNumberOfDays = 5;                     // Show history for number of days
+      datetime       InpShowFromDate = 0;                         // Show history starting from
       ENUM_BOOL      InpResetOpenOnNewTradingDay = true;          // Synchronize first bar's open on new day
 
 #endif
@@ -29,13 +31,14 @@
 // Remaining settings are located in the include file below.
 // These are common for all custom charts
 //
-#include <az-invest/sdk/CustomChartSettingsBase.mqh>
+#include <AZ-INVEST/SDK/CustomChartSettingsBase.mqh>
 
 struct TIMEINTERVALCHART_SETTINGS
 {
    int            intervalMultiple;
    ENUM_INTERVAL  interval;
    int            showNumberOfDays;
+   datetime       showFromDate;
    ENUM_BOOL      resetOpenOnNewTradingDay;   
    
    long           barTimeInterval;
@@ -59,6 +62,7 @@ class CTimeIntervalCustomChartSettigns : public CCustomChartSettingsBase
    virtual string GetSettingsFileName();
    virtual uint CustomChartSettingsToFile(int handle);
    virtual uint CustomChartSettingsFromFile(int handle);
+   virtual uint CustomChartSettingsSize();
 };
 
 void CTimeIntervalCustomChartSettigns::CTimeIntervalCustomChartSettigns()
@@ -88,11 +92,17 @@ uint CTimeIntervalCustomChartSettigns::CustomChartSettingsFromFile(int file_hand
    return FileReadStruct(file_handle,this.settings);
 }
 
+uint CTimeIntervalCustomChartSettigns::CustomChartSettingsSize()
+{
+   return sizeof(this.settings);
+}
+
 void CTimeIntervalCustomChartSettigns::SetCustomChartSettings()
 {
    //settings.barSizeInTicks = barSizeInTicks;
    settings.interval = InpInterval;
    settings.intervalMultiple = InpIntervalMultiple;
    settings.showNumberOfDays = InpShowNumberOfDays;
+   settings.showFromDate = InpShowFromDate;
    settings.resetOpenOnNewTradingDay = InpResetOpenOnNewTradingDay;
 }
