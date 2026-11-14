@@ -1,10 +1,17 @@
 ﻿#property copyright "Copyright 2018-2020, Level Up Software"
 #property link      "http://www.az-invest.eu"
-#property version   "3.00"
+#property version   "3.01"
 
 input bool UseOnCustomChart = true; // Use this indicator on custom chart handle
 
+//
+// GENERATED FILE -- do not edit by hand.
+// Source: 9nix6/Median-and-Turbo-Renko-indicator-bundle @ fef65beef00c66cbcfbbacc228604c8dfe8d1c8f
+//         Include/AZ-INVEST/SDK/MedianRenkoIndicator.mqh
+// Regenerate with: python3 tools/sync_from_bundle.py   (see that file for what differs and why)
+//
 //#define DEVELOPER_VERSION
+#include <AZ-INVEST/ChartOwnership.mqh>
 #include <AZ-INVEST/SDK/SecondsChart.mqh>
 
 class SecondsChartIndicator
@@ -52,6 +59,18 @@ class SecondsChartIndicator
       double   GetSell_volume(int index) { return GetArrayValueDouble(Sell_volume, index); };
       double   GetBuySell_volume(int index) { return GetArrayValueDouble(BuySell_volume, index); };
 
+      bool     CanvasXYToTimePrice(
+                  long           chart_id,     // Chart ID
+                  long           x,            // The X coordinate on the chart
+                  double         y,            // The Y coordinate on the chart
+                  int&           sub_window,   // The number of the subwindow
+                  datetime&      time,         // Time on custom chart
+                  datetime&      canvasTime,   // Time on canvas chart
+                  double&        price         // Price oncustom chart
+               );
+      bool     TimeToCustomChartTime(datetime canvasTime, datetime& customChartTime);
+      bool     CustomChartTimeToCanvasTime(datetime customChartTime, datetime& canvasTime);
+
       bool     IsNewBar;
 
                SecondsChartIndicator();
@@ -69,18 +88,6 @@ class SecondsChartIndicator
       int      GetRatesTotal() { return ArraySize(Open); };     
       void     BufferShiftLeft(double &buffer[]);
       
-      bool     CanvasXYToTimePrice(
-                  long           chart_id,     // Chart ID
-                  long           x,            // The X coordinate on the chart
-                  double         y,            // The Y coordinate on the chart
-                  int&           sub_window,   // The number of the subwindow
-                  datetime&      time,         // Time on custom chart
-                  datetime&      canvasTime,   // Time on canvas chart
-                  double&        price         // Price oncustom chart
-               );
-      bool     TimeToCustomChartTime(datetime canvasTime, datetime& customChartTime);
-      bool     CustomChartTimeToCanvasTime(datetime customChartTime, datetime& canvasTime);
-
    private:
   
       bool  CheckStatus();
@@ -98,8 +105,6 @@ class SecondsChartIndicator
       double CalcAppliedPrice(const MqlRates &_rates, ENUM_APPLIED_PRICE applied_price);
       double CalcAppliedPrice(const double &o,const double &l,const double &h,const double &c,ENUM_APPLIED_PRICE applied_price);
 
-      ENUM_TIMEFRAMES TFMigrate(int tf);
-      datetime iTime(string symbol,int tf,int index);
       double GetArrayValueDouble(double &arr[], int index);
       long GetArrayValueLong(long &arr[], int index);
       datetime GetArrayValueDateTime(datetime &arr[], int index);
@@ -150,6 +155,10 @@ bool SecondsChartIndicator::NeedsReload(void)
    return false;
 }
 
+void SecondsChartIndicator::OnDeinit(const int reason)
+{
+}
+
 bool SecondsChartIndicator::OnCalculate(const int _rates_total,const int _prev_calculated, const datetime &_Time[], const double &_Close[])
 {   
    if(firstRun)
@@ -196,7 +205,7 @@ bool SecondsChartIndicator::OnCalculate(const int _rates_total,const int _prev_c
       GetOLHC(0,_rates_total);
       this.prev_calculated = 0;
       firstRun = true; 
-      ChartSetSymbolPeriod(ChartID(), _Symbol, _Period); // try to force reload
+      ReloadChartIfOwn(ChartID(), _Symbol, _Period); // try to force reload
       return false;
    }                                      
 
@@ -642,7 +651,7 @@ int SecondsChartIndicator::GetOLHCForIndicatorCalc(double &o[],double &l[],doubl
 }
 
 //
-// Get "count" MqlRates into "ratesInfoArray[]" array starting from "start" bar  
+// Get "count" custom chart's MqlRates into "ratesInfoArray[]" array starting from "start" bar  
 //
 
 int SecondsChartIndicator::GetOLHCAndApplPriceForIndicatorCalc(double &o[],double &l[],double &h[],double &c[],datetime &t[],long &tickVolume[],long &realVolume[],double &buyVolume[], double &sellVolume[], double &buySellVolume[],double &price[],ENUM_APPLIED_PRICE _applied_price, int start, int count)
@@ -685,68 +694,8 @@ int SecondsChartIndicator::GetOLHCAndApplPriceForIndicatorCalc(double &o[],doubl
    return copied;
 }
 
-// TFMigrate: 
-// https://www.mql5.com/en/forum/2842#comment_39496
 //
-ENUM_TIMEFRAMES SecondsChartIndicator::TFMigrate(int tf)
-{
-   switch(tf)
-   {
-      case 0: return(PERIOD_CURRENT);
-      case 1: return(PERIOD_M1);
-      case 5: return(PERIOD_M5);
-      case 15: return(PERIOD_M15);
-      case 30: return(PERIOD_M30);
-      case 60: return(PERIOD_H1);
-      case 240: return(PERIOD_H4);
-      case 1440: return(PERIOD_D1);
-      case 10080: return(PERIOD_W1);
-      case 43200: return(PERIOD_MN1);
-      
-      case 2: return(PERIOD_M2);
-      case 3: return(PERIOD_M3);
-      case 4: return(PERIOD_M4);      
-      case 6: return(PERIOD_M6);
-      case 10: return(PERIOD_M10);
-      case 12: return(PERIOD_M12);
-      case 16385: return(PERIOD_H1);
-      case 16386: return(PERIOD_H2);
-      case 16387: return(PERIOD_H3);
-      case 16388: return(PERIOD_H4);
-      case 16390: return(PERIOD_H6);
-      case 16392: return(PERIOD_H8);
-      case 16396: return(PERIOD_H12);
-      case 16408: return(PERIOD_D1);
-      case 32769: return(PERIOD_W1);
-      case 49153: return(PERIOD_MN1);      
-
-      default: return(PERIOD_CURRENT);
-   }
-}
-
-datetime SecondsChartIndicator::iTime(string symbol,int tf,int index)
-{
-   if(index < 0)
-   {
-      return(-1);
-   }
-   
-   ENUM_TIMEFRAMES timeframe=TFMigrate(tf);
-   
-   datetime Arr[];
-   
-   if(CopyTime(symbol, timeframe, index, 1, Arr) > 0)
-   {
-      return(Arr[0]);
-   }
-   else 
-   {
-      return(-1);
-   }
-}
-
-//
-//  Function used for calculating the Apllied Price based on custom chart's OLHC values
+//  Function used for calculating the Apllied Price based on the custom chart's OLHC values
 //
 
 double SecondsChartIndicator::CalcAppliedPrice(const MqlRates &_rates, ENUM_APPLIED_PRICE _applied_price)
@@ -883,6 +832,6 @@ bool SecondsChartIndicator::CustomChartTimeToCanvasTime(datetime customChartTime
    if(ix == -1)
       return false;
       
-   canvasTime = ::iTime(_Symbol, _Period, ix);
+   canvasTime = iTime(_Symbol, _Period, ix);
    return true;
 }
