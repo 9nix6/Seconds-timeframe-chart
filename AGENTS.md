@@ -34,6 +34,7 @@ as `../Median-and-Turbo-Renko-indicator-bundle`); change shared files there firs
 | `Include/AZ-INVEST/SDK/SecondsChartIndicator.mqh` | **generated** from the bundle's `MedianRenkoIndicator.mqh`: this product's names substituted, plus the differences declared in `SHIM_PATCHES` — never edit it by hand |
 | `Include/AZ-INVEST/ChartOwnership.mqh` | owned here; the guard the product installer ships. The generated shim uses it so an `iCustom()` instance never reloads the caller's chart |
 | `SecondsChart.mqh`, `TimeIntervalCustomChartSettings.mqh` | **owned here** |
+| `Experts/SecondsChart_ExampleEA.mq5` | **owned here**; adapted from X-Tick-Chart's `TickChart_ExampleEA.mq5`. A reading aid, it places no trades |
 
 The bundle's `Include/AGENTS.md`, `Indicators/AGENTS.md` and `Experts/AGENTS.md` describe the
 settings handshake, the resync state machine, the porting contract and the EA conventions. They

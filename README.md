@@ -75,7 +75,7 @@ Leave them as they are: this repository contains the headers for Seconds chart o
 | `Include/AZ-INVEST/SDK/` | Client library and helper classes |
 | `Include/AZ-INVEST/CustomBarConfig.mqh` | Product and edition selection (`#define` ladder) |
 | `Indicators/SecondsTfChart/` | 64 indicators ported to the custom chart |
-| `Experts/` | Two EAs, both ready to trade |
+| `Experts/` | Two EAs ready to trade, and `SecondsChart_ExampleEA.mq5`: a minimal skeleton showing how to create the `SecondsChart` class and read bars, moving averages, volume and channel values |
 
 Each directory mirrors its counterpart under `MQL5/`, which is why the install step is a straight
 copy.
