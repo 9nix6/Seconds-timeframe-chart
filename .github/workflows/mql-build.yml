@@ -388,6 +388,10 @@ jobs:
             echo
             echo "If the EA or an indicator loads but shows nothing, it is usually the wrong archive: the two editions install the indicator under different names, and the SDK has to ask for the right one."
             echo
+            echo "## Requirements"
+            echo
+            echo "Indicator version 1.07 or newer. Older indicators write a settings file with a different layout, which this SDK rejects; for those, use the 1.06 release."
+            echo
             echo "## Build"
             echo
             echo "Every source under \`Experts/\` and \`Indicators/SecondsTfChart/\` was compiled by MetaEditor in CI for this release, once per edition, with any error or warning failing the build. Each archive ships the \`CustomBarConfig.mqh\` its own binaries were compiled from, so recompiling gives you what was shipped."

@@ -36,6 +36,8 @@ as `../Median-and-Turbo-Renko-indicator-bundle`); change shared files there firs
 | `SecondsChart.mqh`, `TimeIntervalCustomChartSettings.mqh` | **owned here** |
 | `Experts/SecondsChart_ExampleEA.mq5` | **owned here**; adapted from X-Tick-Chart's `TickChart_ExampleEA.mq5`. A reading aid, it places no trades |
 
+**Minimum indicator version: 1.07** (2021-07-20). That release added `showFromDate` to `TIMEINTERVALCHART_SETTINGS` and replaced `ChannelPriceLabel` + `ChannelMidPriceLabel` with `ChannelPriceLabels`. The two settings structs and the 48-argument `iCustom()` list are unchanged from 1.07 to the current indicator, so 1.07 is the oldest build whose settings file passes the size guard. The README and the release notes text in `mql-build.yml` both state it; change all three together.
+
 The bundle's `Include/AGENTS.md`, `Indicators/AGENTS.md` and `Experts/AGENTS.md` describe the
 settings handshake, the resync state machine, the porting contract and the EA conventions. They
 apply here unchanged once you read `MedianRenko` as `SecondsChart` and `MedianRenkoIndicator` as

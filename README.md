@@ -23,6 +23,7 @@ need to duplicate the indicator's configuration in the EA's own inputs.
 | Platform | MetaTrader 5 |
 | Compiler | MetaEditor (bundled with MT5, Windows only) |
 | Indicator | Seconds timeframe chart (MQL5 Market) or Seconds Timeframe Chart for MetaTrader 5 (az-invest.eu) — see [Selecting your edition](#selecting-your-edition) |
+| Indicator version | **1.07 or newer.** Version 1.07 added the *show from date* input and replaced the two channel price-label inputs with one, which changed both the settings file and the input list this SDK passes to the indicator. With 1.06 or older the SDK rejects the indicator's settings file; use the [1.06 release](https://github.com/9nix6/Seconds-timeframe-chart/releases/tag/1.06) for those |
 
 ## Installation
 
