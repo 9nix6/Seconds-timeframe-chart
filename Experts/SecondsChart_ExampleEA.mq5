@@ -4,6 +4,17 @@
 #property description "Example EA showing the way to use the SecondsChart class defined in SecondsChart.mqh" 
 //#define DEVELOPER_VERSION
 
+//
+// EDITION: which Seconds chart indicator does this EA load?
+// -------------------------------------------------------------------------------------------------
+// Left commented, the EA loads the MQL5 Market edition ("Market\Seconds timeframe chart").
+// If you bought the indicator from https://www.az-invest.eu/seconds-timeframe-chart-for-metatrader-5
+// uncomment the line below, so the EA loads "SecondsTfChart" instead, and recompile.
+// The switch in CustomBarConfig.mqh does not reach an EA: this line is the one that decides.
+//
+
+//#define SECONDSCHART_LICENSE
+
 input int InpRSIPeriod = 14; // RSI period
 
 //
