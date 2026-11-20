@@ -63,10 +63,28 @@ then recompile (**F7**). The mapping:
 > A mismatch here means `iCustom()` is asking for an indicator you do not have installed, which
 > produces an empty chart rather than an error message.
 
+### The EAs have their own switch
+
+`CustomBarConfig.mqh` is read by the indicators only. An EA does not include it, so the line above
+does not change which indicator an EA loads. Each EA in `Experts/` carries its own line near the top:
+
+```c
+//#define SECONDSCHART_LICENSE
+```
+
+| You bought | In the EA | Indicator the EA looks for |
+|---|---|---|
+| Seconds timeframe chart (MQL5 Market) | leave it commented — the default | `Market\Seconds timeframe chart` |
+| Seconds Timeframe Chart for MetaTrader 5 (az-invest.eu) | uncomment it and recompile | `SecondsTfChart` |
+
+With the wrong setting the EA fails to start, and the Strategy Tester reports
+`cannot load custom indicator 'Market\Seconds timeframe chart' [4802]`.
+
 `CustomBarConfig.mqh` and the two ready-to-trade EAs are shared with the other AZ-INVEST custom
 chart SDKs, so they also carry `#define`s for those products (Renko, Range Bars, Tick & Volume Chart, Line Break).
-Leave them as they are: this repository contains the headers for Seconds chart only, and the
-`SECONDSCHART_LICENSE` / `EA_ON_SECONDS_CHART` defines are already selected.
+Leave those as they are: this repository contains the headers for Seconds chart only. In
+`CustomBarConfig.mqh` the `SECONDSCHART_LICENSE` define is already selected; in the two EAs the
+`EA_ON_SECONDS_CHART` define is already selected, and `SECONDSCHART_LICENSE` is the line described above.
 
 ## Repository layout
 
@@ -75,7 +93,7 @@ Leave them as they are: this repository contains the headers for Seconds chart o
 | `Include/AZ-INVEST/SDK/` | Client library and helper classes |
 | `Include/AZ-INVEST/CustomBarConfig.mqh` | Product and edition selection (`#define` ladder) |
 | `Indicators/SecondsTfChart/` | 64 indicators ported to the custom chart |
-| `Experts/` | Two EAs, both ready to trade |
+| `Experts/` | Two EAs ready to trade, and `SecondsChart_ExampleEA.mq5`: a minimal skeleton showing how to create the `SecondsChart` class and read bars, moving averages, volume and channel values |
 
 Each directory mirrors its counterpart under `MQL5/`, which is why the install step is a straight
 copy.
