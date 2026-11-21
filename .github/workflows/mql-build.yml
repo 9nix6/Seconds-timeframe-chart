@@ -495,7 +495,7 @@ jobs:
             echo
             echo "## Which download do I need?"
             echo
-            echo "Both archives contain the same sources and the same 66 compiled programs. They differ only in which edition of the indicator they are built for, so pick the one matching what you bought:"
+            echo "Both archives contain the same sources and the same 67 compiled programs. They differ only in which edition of the indicator they are built for, so pick the one matching what you bought:"
             echo
             echo "| Archive | For |"
             echo "|---|---|"
